@@ -5,10 +5,10 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number | undefined;
 
-  @Column({ type: 'text' })
+  @Column()
   name: string | undefined;
 
-  @Column({ type: 'text' })
+  @Column()
   email: string | undefined;
 
   @CreateDateColumn()
