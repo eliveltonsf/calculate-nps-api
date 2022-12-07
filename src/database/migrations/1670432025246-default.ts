@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class default1670388058975 implements MigrationInterface {
-  name = 'default1670388058975';
+export class default1670432025246 implements MigrationInterface {
+  name = 'default1670432025246';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" text NOT NULL, "email" text NOT NULL, "createdAt" datetime NOT NULL DEFAULT (datetime('now')))`
+      `CREATE TABLE "users" ("id" varchar PRIMARY KEY NOT NULL, "name" text NOT NULL, "email" text NOT NULL, "created_at" datetime NOT NULL DEFAULT (datetime('now')))`
     );
   }
 

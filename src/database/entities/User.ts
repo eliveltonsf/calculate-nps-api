@@ -2,15 +2,15 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeor
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number | undefined;
+  @PrimaryGeneratedColumn('uuid')
+  readonly id: string | undefined;
 
-  @Column()
+  @Column({ type: 'text' })
   name: string | undefined;
 
-  @Column()
+  @Column({ type: 'text' })
   email: string | undefined;
 
   @CreateDateColumn()
-  createdAt: string | undefined;
+  created_at?: Date;
 }
