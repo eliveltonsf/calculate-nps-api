@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import surveysRepository from '../repositories/SurveysRepository';
 import surveysUsersRepository from '../repositories/SurveysUsersRepository';
 import userRepository from '../repositories/UserRepository';
+import SendMailService from '../services/SendMailService';
 
 class SendMailController {
   async execute(request: Request, response: Response) {
@@ -21,11 +22,11 @@ class SendMailController {
       });
     }
 
-    const surveyAlreadyExists = await surveysRepository.findOneBy({ id: surveyId });
+    const dataSurvey = await surveysRepository.findOneBy({ id: surveyId });
 
-    console.log(surveyAlreadyExists);
+    console.log(dataSurvey);
 
-    if (!surveyAlreadyExists) {
+    if (!dataSurvey) {
       return response.status(400).json({
         error: 'Survey does not exists!',
       });
@@ -36,6 +37,8 @@ class SendMailController {
       survey: surveyId,
     });
     await surveysUsersRepository.save(surveyUser);
+
+    await SendMailService.execute(email, dataSurvey.title, dataSurvey.description);
 
     return response.json(surveyUser);
   }
