@@ -1,4 +1,6 @@
-import { Surveys } from '../models/Surveys';
+import Survey from '../models/Survey';
 import { AppDataSource } from './../data-source';
 
-export const surveysRepository = AppDataSource.getRepository(Surveys);
+const surveysRepository = AppDataSource.getRepository(Survey);
+
+export default surveysRepository;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { userRepository } from './../repositories/UserRepository';
+import userRepository from './../repositories/UserRepository';
 
 class UserController {
   async create(request: Request, response: Response) {
@@ -33,6 +33,12 @@ class UserController {
       return response.status(500).json({ message: 'Internal Server Error!', error });
     }
   }
+
+  async show(request: Request, response: Response) {
+    const all = await userRepository.find();
+
+    return response.json(all);
+  }
 }
 
-export { UserController };
+export default UserController;

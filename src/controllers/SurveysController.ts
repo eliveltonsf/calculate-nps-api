@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { surveysRepository } from './../repositories/SurveysRepository';
+import surveysRepository from './../repositories/SurveysRepository';
 
 class SurveysController {
   async create(request: Request, response: Response) {

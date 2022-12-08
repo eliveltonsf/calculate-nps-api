@@ -1,6 +1,6 @@
-import { AppDataSource } from './../data-source';
 import request from 'supertest';
 import app from '../app';
+import { AppDataSource } from './../data-source';
 
 describe('Users', () => {
   beforeAll(() => {
