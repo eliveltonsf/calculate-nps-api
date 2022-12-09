@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import User from './User';
 import Survey from './Survey';
 
@@ -10,13 +10,11 @@ export default class Surveys {
   @Column({ type: 'text', nullable: true })
   value?: string;
 
-  @OneToOne(() => User, { cascade: true })
-  @JoinColumn()
-  user?: User | string;
+  @ManyToOne(() => User, (user) => user.id, { cascade: true, eager: true })
+  public user?: User[] | string;
 
-  @OneToOne(() => Survey, { cascade: true })
-  @JoinColumn()
-  survey?: Survey | string;
+  @ManyToOne(() => Survey, (survey) => survey.id, { cascade: true, eager: true })
+  public survey?: Survey[] | string;
 
   @CreateDateColumn()
   create_at?: Date;
