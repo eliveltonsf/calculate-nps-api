@@ -6,6 +6,14 @@ import SendMailService from '../services/SendMailService';
 import { resolve } from 'path';
 import 'dotenv';
 
+interface IVariable {
+  name: string | undefined;
+  title: string | undefined;
+  description: string | undefined;
+  id: string | undefined;
+  link: string | undefined;
+}
+
 class SendMailController {
   async execute(request: Request, response: Response) {
     const { email, surveyId } = request.body;
@@ -28,20 +36,21 @@ class SendMailController {
       });
     }
 
-    const variables = {
-      name: dataUser.name,
-      title: dataSurvey.title,
-      description: dataSurvey.description,
-      user_id: dataUser.id,
-      link: process.env.URL_MAIL,
-    };
-
     const npsPath = resolve(__dirname, '..', 'views', 'emails', 'npsMail.hbs');
 
     const dataSurveyUsersExists = await surveysUsersRepository.findOneBy({ user: { id: dataUser.id } });
     const dataUsersSurveyExists = await surveysUsersRepository.findOneBy({ survey: { id: dataSurvey.id } });
 
+    const variables: IVariable = {
+      name: dataUser.name,
+      title: dataSurvey.title,
+      description: dataSurvey.description,
+      id: '',
+      link: process.env.URL_MAIL,
+    };
+
     if (dataSurveyUsersExists && dataUsersSurveyExists) {
+      variables.id = dataSurveyUsersExists?.id;
       await SendMailService.execute(email, dataSurvey.title, variables, npsPath);
       return response.json(dataUsersSurveyExists);
     }
@@ -52,6 +61,8 @@ class SendMailController {
     });
 
     await surveysUsersRepository.save(surveyUser);
+
+    variables.id = surveyUser.id;
 
     await SendMailService.execute(email, dataSurvey.title, variables, npsPath);
 
