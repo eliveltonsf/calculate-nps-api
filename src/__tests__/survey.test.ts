@@ -9,6 +9,10 @@ describe('Surveys', () => {
     });
   });
 
+  afterAll(async () => {
+    await AppDataSource.dropDatabase();
+  });
+
   it('Should be able to create a new user', async () => {
     const response = await request(app).post('/surveys').send({
       title: 'Title Example',
