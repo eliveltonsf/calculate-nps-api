@@ -8,7 +8,7 @@ export default class Surveys {
   readonly id?: string;
 
   @Column({ type: 'text', nullable: true })
-  value?: string;
+  value?: number;
 
   @ManyToOne(() => User, (user) => user.id, { cascade: true, eager: true })
   public user?: User[] | string;
