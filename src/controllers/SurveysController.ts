@@ -5,18 +5,14 @@ class SurveysController {
   async create(request: Request, response: Response) {
     const { title, description } = request.body;
 
-    try {
-      const newSurvey = surveysRepository.create({
-        title,
-        description,
-      });
+    const newSurvey = surveysRepository.create({
+      title,
+      description,
+    });
 
-      await surveysRepository.save(newSurvey);
+    await surveysRepository.save(newSurvey);
 
-      return response.status(201).json(newSurvey);
-    } catch (error) {
-      return response.status(500).json({ message: 'Internal Server Error!', error });
-    }
+    return response.status(201).json(newSurvey);
   }
 
   async show(request: Request, response: Response) {

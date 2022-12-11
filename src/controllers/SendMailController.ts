@@ -1,3 +1,4 @@
+import { AppError } from './../errors/AppError';
 import { Request, Response } from 'express';
 import surveysRepository from '../repositories/SurveysRepository';
 import surveysUsersRepository from '../repositories/SurveysUsersRepository';
@@ -23,17 +24,13 @@ class SendMailController {
     });
 
     if (!dataUser) {
-      return response.status(400).json({
-        error: 'User does not exists!',
-      });
+      throw new AppError('User does not exists!');
     }
 
     const dataSurvey = await surveysRepository.findOneBy({ id: surveyId });
 
     if (!dataSurvey) {
-      return response.status(400).json({
-        error: 'Survey does not exists!',
-      });
+      throw new AppError('Survey does not exists!');
     }
 
     const npsPath = resolve(__dirname, '..', 'views', 'emails', 'npsMail.hbs');

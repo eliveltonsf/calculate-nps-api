@@ -1,37 +1,46 @@
+import { AppError } from './../errors/AppError';
 import { Request, Response } from 'express';
 import userRepository from './../repositories/UserRepository';
+import * as yup from 'yup';
 
 class UserController {
   async create(request: Request, response: Response) {
     const { name, email } = request.body;
+
+    const schema = yup.object({
+      name: yup.string().required(),
+      email: yup.string().email().required(),
+    });
+
+    try {
+      await schema.validate(request.body, { abortEarly: false });
+    } catch (err) {
+      return response.status(400).json({ error: err });
+    }
 
     const userAlreadyExits = await userRepository.findOneBy({
       email,
     });
 
     if (userAlreadyExits) {
-      return response.status(400).json({ message: 'User already exists!' });
+      throw new AppError('User already exists!');
     }
 
     if (!name) {
-      return response.status(400).json({ message: 'O nome é obrigatório!' });
+      throw new AppError('O nome é obrigatório!');
     }
     if (!email) {
-      return response.status(400).json({ message: 'O email é obrigatório!' });
+      throw new AppError('O email é obrigatório!');
     }
 
-    try {
-      const newUser = userRepository.create({
-        name,
-        email,
-      });
+    const newUser = userRepository.create({
+      name,
+      email,
+    });
 
-      await userRepository.save(newUser);
+    await userRepository.save(newUser);
 
-      return response.status(201).json(newUser);
-    } catch (error) {
-      return response.status(500).json({ message: 'Internal Server Error!', error });
-    }
+    return response.status(201).json(newUser);
   }
 
   async show(request: Request, response: Response) {
